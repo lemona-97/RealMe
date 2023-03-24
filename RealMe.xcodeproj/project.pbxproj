@@ -10,9 +10,11 @@
 		3EB0F9D7C60F7518DA0C64E2 /* Pods_RealMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C64392301B75DAAA33EF76 /* Pods_RealMe.framework */; };
 		FAC32E5229CC774000D5C7BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5129CC774000D5C7BC /* AppDelegate.swift */; };
 		FAC32E5429CC774000D5C7BC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */; };
-		FAC32E5629CC774000D5C7BC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5529CC774000D5C7BC /* ViewController.swift */; };
 		FAC32E5B29CC774200D5C7BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAC32E5A29CC774200D5C7BC /* Assets.xcassets */; };
 		FAC32E5E29CC774200D5C7BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAC32E5C29CC774200D5C7BC /* LaunchScreen.storyboard */; };
+		FAC32E6629CC7B1A00D5C7BC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */; };
+		FAC32E6D29CC7BEF00D5C7BC /* ViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E6C29CC7BEF00D5C7BC /* ViewControllerProtocol.swift */; };
+		FAC32E6F29CC960F00D5C7BC /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E6E29CC960F00D5C7BC /* UIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +24,12 @@
 		FAC32E4E29CC774000D5C7BC /* RealMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC32E5129CC774000D5C7BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FAC32E5529CC774000D5C7BC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FAC32E5A29CC774200D5C7BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FAC32E5D29CC774200D5C7BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAC32E5F29CC774200D5C7BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		FAC32E6C29CC7BEF00D5C7BC /* ViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerProtocol.swift; sourceTree = "<group>"; };
+		FAC32E6E29CC960F00D5C7BC /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +50,6 @@
 				2DD377AF849F34F943F6D946 /* Pods-RealMe.debug.xcconfig */,
 				3BF17A2595CEB89903E40C32 /* Pods-RealMe.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -79,14 +82,48 @@
 		FAC32E5029CC774000D5C7BC /* RealMe */ = {
 			isa = PBXGroup;
 			children = (
-				FAC32E5129CC774000D5C7BC /* AppDelegate.swift */,
-				FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */,
-				FAC32E5529CC774000D5C7BC /* ViewController.swift */,
+				FAC32E6B29CC7B6C00D5C7BC /* Views */,
+				FAC32E6929CC7B4B00D5C7BC /* Extension */,
+				FAC32E6829CC7B4300D5C7BC /* Protocol */,
+				FAC32E6729CC7B3000D5C7BC /* Base */,
+			);
+			path = RealMe;
+			sourceTree = "<group>";
+		};
+		FAC32E6729CC7B3000D5C7BC /* Base */ = {
+			isa = PBXGroup;
+			children = (
 				FAC32E5A29CC774200D5C7BC /* Assets.xcassets */,
 				FAC32E5C29CC774200D5C7BC /* LaunchScreen.storyboard */,
 				FAC32E5F29CC774200D5C7BC /* Info.plist */,
+				FAC32E5129CC774000D5C7BC /* AppDelegate.swift */,
+				FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */,
 			);
-			path = RealMe;
+			path = Base;
+			sourceTree = "<group>";
+		};
+		FAC32E6829CC7B4300D5C7BC /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				FAC32E6C29CC7BEF00D5C7BC /* ViewControllerProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		FAC32E6929CC7B4B00D5C7BC /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FAC32E6E29CC960F00D5C7BC /* UIView.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		FAC32E6B29CC7B6C00D5C7BC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,8 +240,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAC32E5629CC774000D5C7BC /* ViewController.swift in Sources */,
+				FAC32E6F29CC960F00D5C7BC /* UIView.swift in Sources */,
+				FAC32E6629CC7B1A00D5C7BC /* MainViewController.swift in Sources */,
 				FAC32E5229CC774000D5C7BC /* AppDelegate.swift in Sources */,
+				FAC32E6D29CC7BEF00D5C7BC /* ViewControllerProtocol.swift in Sources */,
 				FAC32E5429CC774000D5C7BC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,9 +389,9 @@
 				INFOPLIST_FILE = RealMe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RealMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = Test;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -385,9 +424,9 @@
 				INFOPLIST_FILE = RealMe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RealMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = Test;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
