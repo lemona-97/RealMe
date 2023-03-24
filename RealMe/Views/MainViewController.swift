@@ -38,7 +38,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
                 print("Unable to access back camera!")
                 return
         }
-//        guard let frontCamera = AVCaptureDevice.default(for: .video)
         do {
             let input = try AVCaptureDeviceInput(device: backCamera)
             stillImageOutput = AVCapturePhotoOutput()
@@ -120,7 +119,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     @objc func takePhoto() {
         let setting = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         stillImageOutput.capturePhoto(with: setting, delegate: self)
-        
     }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -141,10 +139,12 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         captureSession?.addInput(newVideoInput!)
         captureSession?.commitConfiguration()
     }
+    
     private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
         return devices.filter { $0.position == position }.first
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.captureSession.stopRunning()
