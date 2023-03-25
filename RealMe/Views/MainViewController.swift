@@ -14,9 +14,12 @@ import SnapKit
 final class MainViewController: UIViewController, ViewControllerProtocol, AVCapturePhotoCaptureDelegate {
     
     let preView = UIView()
-    let takePhotoButton = UIButton()
     let capturedImageView = UIImageView()
+    let photoLibraryButton = UIButton()
+    let takePhotoButton = UIButton()
     let changeCameraButton = UIButton()
+    
+    let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
     var captureSession: AVCaptureSession!
     var stillImageOutput: AVCapturePhotoOutput!
@@ -28,15 +31,16 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         addView()
         setLayout()
         addTarget()
-        
+        addDelegate()
         captureSession = AVCaptureSession()
-        captureSession.sessionPreset = .medium
+//        captureSession.sessionPreset = .medium
+        captureSession.sessionPreset = .high
         //NOTE: If you plan to upload your photo to Parse, you will likely need to change your preset to
         //AVCaptureSession.Preset.High or AVCaptureSession.Preset.medium to keep the size under the 10mb Parse max.
         guard let backCamera = AVCaptureDevice.default(for: AVMediaType.video)
-            else {
-                print("Unable to access back camera!")
-                return
+        else {
+            print("Unable to access back camera!")
+            return
         }
         do {
             let input = try AVCaptureDeviceInput(device: backCamera)
@@ -50,8 +54,14 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         catch let error  {
             print("Error Unable to initialize back camera:  \(error.localizedDescription)")
         }
-        
-
+        // 위치 수정 필요
+        preView.addSubview(filterLibraryCollectionView)
+        filterLibraryCollectionView.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-10)
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50)
+        }
         
     }
     override func viewDidLoad() {
@@ -75,11 +85,16 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         
     }
     func setAttribute() {
+        let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
+        let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+        
         preView.do {
             $0.backgroundColor = .white
         }
-        let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
-        let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+        photoLibraryButton.do {
+            $0.setImage(UIImage(systemName: "photo",withConfiguration: imageConfig30), for: .normal)
+            $0.tintColor = .white
+        }
         takePhotoButton.do {
             $0.setImage(UIImage(systemName: "button.programmable", withConfiguration: imageConfig70), for: .normal)
             $0.tintColor = .white
@@ -88,10 +103,19 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.setImage(UIImage(systemName: "arrow.triangle.2.circlepath", withConfiguration: imageConfig30), for: .normal)
             $0.tintColor = .white
         }
+        filterLibraryCollectionView.do {
+            let layout = LeftAlignedCollectionViewFlowLayout()
+            $0.backgroundColor = .red
+            $0.showsHorizontalScrollIndicator = true
+            $0.showsVerticalScrollIndicator = false
+            $0.collectionViewLayout = layout
+            $0.register(filterLibraryCollectionViewCell.self, forCellWithReuseIdentifier: "filterLibraryCollectionViewCell")
+        }
     }
     
     func addView() {
-        self.view.addSubviews([preView,takePhotoButton,capturedImageView,changeCameraButton])
+        self.view.addSubviews([preView, photoLibraryButton, takePhotoButton, capturedImageView, changeCameraButton])
+        
     }
     
     func setLayout() {
@@ -105,13 +129,25 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(takePhotoButton.snp.top).offset(-30)
         }
+        photoLibraryButton.snp.makeConstraints {
+            $0.width.equalTo(70)
+            $0.height.equalTo(45)
+            $0.centerY.equalTo(takePhotoButton)
+            $0.leading.equalToSuperview().offset(30)
+        }
+        
         changeCameraButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-30)
             $0.centerY.equalTo(takePhotoButton)
             $0.width.height.equalTo(70)
         }
     }
+    func addDelegate() {
+        filterLibraryCollectionView.delegate = self
+        filterLibraryCollectionView.dataSource = self
+    }
     func addTarget() {
+        photoLibraryButton.addTarget(self, action: #selector(presentPhotoLibrary), for: .touchUpInside)
         takePhotoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
         changeCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
     }
@@ -124,7 +160,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
         guard let imageData = photo.fileDataRepresentation()
-            else { return }
+        else { return }
         
         let image = UIImage(data: imageData)
         capturedImageView.image = image
@@ -133,7 +169,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         captureSession?.beginConfiguration()
         let currentInput = captureSession?.inputs.first as? AVCaptureDeviceInput
         captureSession?.removeInput(currentInput!)
-
+        
         let newCameraDevice = currentInput?.device.position == .back ? camera(with: .front) : camera(with: .back)
         let newVideoInput = try? AVCaptureDeviceInput(device: newCameraDevice!)
         captureSession?.addInput(newVideoInput!)
@@ -150,3 +186,5 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         self.captureSession.stopRunning()
     }
 }
+
+
