@@ -34,7 +34,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         addDelegate()
         captureSession = AVCaptureSession()
 //        captureSession.sessionPreset = .medium
-        captureSession.sessionPreset = .high
+        captureSession.sessionPreset = .medium
         //NOTE: If you plan to upload your photo to Parse, you will likely need to change your preset to
         //AVCaptureSession.Preset.High or AVCaptureSession.Preset.medium to keep the size under the 10mb Parse max.
         guard let backCamera = AVCaptureDevice.default(for: AVMediaType.video)

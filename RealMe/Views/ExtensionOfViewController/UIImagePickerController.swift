@@ -18,14 +18,23 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.captureSession.stopRunning()
             self.capturedImageView.image = pickedImage
+            captureSession?.commitConfiguration()
         }
-
+        DispatchQueue.global().async {
+            self.captureSession.startRunning()
+        }
         dismiss(animated: true, completion: nil)
+        
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        DispatchQueue.global().async {
+            self.captureSession.startRunning()
+        }
         dismiss(animated: true, completion: nil)
+        
     }
 }
 
