@@ -11,31 +11,31 @@ import CoreImage
 
 
 class FilterManager {
-    static func returnCIFilter(_ filterName: Int) -> CIFilter {
+    static func returnCIFilter(_ beforeImage: UIImage, _ filterName: Int) -> UIImage {
         switch filterName {
         case 0:
             let context = CIContext()
-            let filter = CIFilter(name: "abcd")!
+            let filter = CIFilter(name: "CISepiaTone")!
             filter.setValue(0.8, forKey: kCIInputIntensityKey)
-            let image = CIImage(image: UIImage(systemName: "circle")!)
+            let image = CIImage(image: beforeImage)
             filter.setValue(image, forKey: kCIInputImageKey)
             let result = filter.outputImage!
             let cgImage = context.createCGImage(result, from: result.extent)
-            return CIFilter()
+            return UIImage(cgImage: cgImage!)
 
         case 1:
-            return CIFilter()
+            return UIImage()
 
         case 2:
-            return CIFilter()
+            return UIImage()
 
         case 3:
-            return CIFilter()
+            return UIImage()
 
         case 4:
-            return CIFilter()
+            return UIImage()
         default:
-            return CIFilter()
+            return UIImage()
         }
 
     }

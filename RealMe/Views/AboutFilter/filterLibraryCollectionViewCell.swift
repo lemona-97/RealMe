@@ -10,8 +10,8 @@ import UIKit
 final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControllerProtocol {
     
     
-    var sample = UIView()
-    
+    var sample = UIImageView()
+    var sampleImage = CIImage(image: UIImage(systemName: "circle")!)
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAttribute()
@@ -21,7 +21,11 @@ final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
     
     func setAttribute() {
 
-        contentView.backgroundColor = .blue
+        contentView.backgroundColor = .white
+        
+        sample.do {
+            $0.image = FilterManager.returnCIFilter(UIImage(named: "1")!, 0)
+        }
     }
     func addView() {
         contentView.addSubview(sample)

@@ -71,6 +71,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FAA9531829EFAEF50093EF09 /* AboutFilter */ = {
+			isa = PBXGroup;
+			children = (
+				FAC32E7329CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift */,
+				FAC32E7529CD7C0000D5C7BC /* filtersManager.swift */,
+			);
+			path = AboutFilter;
+			sourceTree = "<group>";
+		};
 		FAC32E4529CC774000D5C7BC = {
 			isa = PBXGroup;
 			children = (
@@ -132,10 +141,9 @@
 		FAC32E6B29CC7B6C00D5C7BC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FAA9531829EFAEF50093EF09 /* AboutFilter */,
 				FAC32E7B29CEDEF200D5C7BC /* ExtensionOfViewController */,
 				FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */,
-				FAC32E7329CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift */,
-				FAC32E7529CD7C0000D5C7BC /* filtersManager.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
