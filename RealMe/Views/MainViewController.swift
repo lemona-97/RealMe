@@ -30,6 +30,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         setAttribute()
         addView()
         setLayout()
+        
         addTarget()
         addDelegate()
         captureSession = AVCaptureSession()
@@ -115,7 +116,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     
     func addView() {
         self.view.addSubviews([preView, photoLibraryButton, takePhotoButton, capturedImageView, changeCameraButton])
-        
+        self.view.addSubview(filterLibraryCollectionView)
     }
     
     func setLayout() {
@@ -140,6 +141,12 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.trailing.equalToSuperview().offset(-30)
             $0.centerY.equalTo(takePhotoButton)
             $0.width.height.equalTo(70)
+        }
+        filterLibraryCollectionView.snp.makeConstraints {
+            $0.leading.equalTo(preView).offset(15)
+            $0.bottom.equalTo(preView).offset(-10)
+            $0.height.equalTo(70)
+            $0.trailing.equalTo(preView).offset(-15)
         }
     }
     func addDelegate() {
@@ -178,6 +185,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     
     private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
+//        let devices2 = AVCaptureDevice.devices
         return devices.filter { $0.position == position }.first
     }
     
