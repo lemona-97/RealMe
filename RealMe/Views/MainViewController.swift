@@ -98,7 +98,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         }
         filterLibraryCollectionView.do {
             let layout = LeftAlignedCollectionViewFlowLayout()
-            $0.backgroundColor = .red
+            $0.backgroundColor = .clear
             $0.showsHorizontalScrollIndicator = true
             $0.showsVerticalScrollIndicator = false
             $0.collectionViewLayout = layout
@@ -136,10 +136,10 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.width.height.equalTo(70)
         }
         filterLibraryCollectionView.snp.makeConstraints {
-            $0.leading.equalTo(preView).offset(15)
-            $0.bottom.equalTo(preView).offset(-10)
-            $0.height.equalTo(70)
-            $0.trailing.equalTo(preView).offset(-15)
+            $0.leading.equalTo(preView)
+            $0.bottom.equalTo(preView)
+            $0.height.equalTo(90)
+            $0.trailing.equalTo(preView)
         }
     }
     func addDelegate() {

@@ -9,9 +9,9 @@ import UIKit
 
 final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControllerProtocol {
     
+    var sampleImageView = UIImageView()
+    var sampleImageName = UILabel()
     
-    var sample = UIImageView()
-    var sampleImage = CIImage(image: UIImage(systemName: "circle")!)
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAttribute()
@@ -23,17 +23,28 @@ final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
 
         contentView.backgroundColor = .white
         
-        sample.do {
+        sampleImageView.do {
             $0.image = FilterManager.returnCIFilter(UIImage(named: "1")!, 0)
+        }
+        sampleImageName.do {
+            $0.text = "필터명"
+            $0.textColor = .black
+            $0.textAlignment = .center
         }
     }
     func addView() {
-        contentView.addSubview(sample)
+        contentView.addSubview(sampleImageView)
+        contentView.addSubview(sampleImageName)
     }
     func setLayout() {
-        sample.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-            make.center.equalToSuperview()
+        sampleImageView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-15)
+        }
+        sampleImageName.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(10)
+            $0.height.equalTo(20)
         }
     }
     
