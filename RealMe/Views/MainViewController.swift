@@ -27,6 +27,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setAttribute()
         addView()
         setLayout()
@@ -55,19 +60,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         catch let error  {
             print("Error Unable to initialize back camera:  \(error.localizedDescription)")
         }
-        // 위치 수정 필요
-        preView.addSubview(filterLibraryCollectionView)
-        filterLibraryCollectionView.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-10)
-            $0.centerX.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(50)
-        }
-        
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
     }
     func setupLivePreview() {
         
@@ -86,8 +78,8 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         
     }
     func setAttribute() {
-        let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
         let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+        let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
         
         preView.do {
             $0.backgroundColor = .white
@@ -97,7 +89,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.tintColor = .white
         }
         takePhotoButton.do {
-            $0.setImage(UIImage(systemName: "button.programmable", withConfiguration: imageConfig70), for: .normal)
+            $0.setImage(UIImage(systemName: "camera.circle.fill", withConfiguration: imageConfig70), for: .normal)
             $0.tintColor = .white
         }
         changeCameraButton.do {
@@ -121,9 +113,10 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     
     func setLayout() {
         takePhotoButton.snp.makeConstraints {
-            $0.width.height.equalTo(70)
+            $0.width.equalTo(70)
+            $0.height.equalTo(70)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-40)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
         preView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
