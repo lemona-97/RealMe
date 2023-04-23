@@ -23,9 +23,6 @@ final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
 
         contentView.backgroundColor = .white
         
-        sampleImageView.do {
-            $0.image = FilterManager.returnCIFilter(UIImage(named: "1")!, 0)
-        }
         sampleImageName.do {
             $0.text = "필터명"
             $0.textColor = .black
