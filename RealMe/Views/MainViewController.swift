@@ -208,10 +208,20 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         
         let cgImage = self.context.createCGImage(addFilter!.outputImage!, from: cameraImage.extent)!
         
-        DispatchQueue.main.async {
-            let filteredImage = UIImage(cgImage: cgImage)
-            self.filteredImage.image = filteredImage
+        if currentCamera?.position == .front {
+            print("1")
+            DispatchQueue.main.async {
+                let filteredImage = UIImage(cgImage: cgImage).withHorizontallyFlippedOrientation()
+                self.filteredImage.image = filteredImage
+            }
+        } else {
+            print("2")
+            DispatchQueue.main.async {
+                let filteredImage = UIImage(cgImage: cgImage)
+                self.filteredImage.image = filteredImage
+            }
         }
+        
     }
     
     @objc func takePhoto() {
@@ -223,6 +233,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         captureSession.removeInput(currentInput!)
         
         let newCameraDevice = currentInput?.device.position == .back ? camera(with: .front) : camera(with: .back)
+        currentCamera = newCameraDevice!
         let newVideoInput = try? AVCaptureDeviceInput(device: newCameraDevice!)
         captureSession.addInput(newVideoInput!)
         captureSession.commitConfiguration()
