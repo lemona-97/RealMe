@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControllerProtocol {
+final class FilterLibraryCollectionViewCell: UICollectionViewCell, ViewControllerProtocol {
     
     var sampleImageView = UIImageView()
     var sampleImageName = UILabel()
@@ -27,6 +27,7 @@ final class filterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
             $0.text = "필터명"
             $0.textColor = .black
             $0.textAlignment = .center
+            $0.font = UIFont(descriptor: .preferredFontDescriptor(withTextStyle: .title3), size: CGFloat(11.0))
         }
     }
     func addView() {

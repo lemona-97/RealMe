@@ -14,7 +14,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterLibraryCollectionViewCell", for: indexPath) as? filterLibraryCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterLibraryCollectionViewCell", for: indexPath) as? FilterLibraryCollectionViewCell else { return UICollectionViewCell() }
         
         cell.sampleImageView.image = FilterManager.returnFilteredUIImage(UIImage(named: "1")!, indexPath.row).resultFilterdUIImage
         cell.sampleImageName.text =  FilterManager.returnFilteredUIImage(UIImage(named: "1")!, indexPath.row).resultFilterName

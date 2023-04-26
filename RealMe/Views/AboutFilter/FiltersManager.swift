@@ -12,6 +12,7 @@ import CoreImage
 struct FilteredImageWithName {
     let resultFilterdUIImage : UIImage
     let resultFilterName : String
+    
     init(resultFilterdUIImage: UIImage, resultFilterName: String) {
         self.resultFilterdUIImage = resultFilterdUIImage
         self.resultFilterName = resultFilterName
