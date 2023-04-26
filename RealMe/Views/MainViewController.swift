@@ -22,9 +22,10 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     let context = CIContext()
     
+    var currentFilter = CIFilter(name: "CISepiaTone")
     var filteredImage =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
-
+    
     
     let photoLibraryButton = UIButton()
     let takePhotoButton = UIButton()
@@ -120,7 +121,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
         {
             AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
-            { (authorized) in
+                                            { (authorized) in
                 DispatchQueue.main.async
                 {
                     if authorized
@@ -144,8 +145,8 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
                 frontCamera = device
             }
         }
-        
         currentCamera = backCamera
+        
     }
     
     func setupInputOutput() {
@@ -198,14 +199,14 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         connection.videoOrientation = orientation
         
         
-        let comicEffect = CIFilter(name: "CIComicEffect")
+        let addFilter = currentFilter
         
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        comicEffect!.setValue(cameraImage, forKey: kCIInputImageKey)
+        addFilter!.setValue(cameraImage, forKey: kCIInputImageKey)
         
-        let cgImage = self.context.createCGImage(comicEffect!.outputImage!, from: cameraImage.extent)!
+        let cgImage = self.context.createCGImage(addFilter!.outputImage!, from: cameraImage.extent)!
         
         DispatchQueue.main.async {
             let filteredImage = UIImage(cgImage: cgImage)
@@ -217,6 +218,17 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         
     }
     @objc func switchCamera() {
+        captureSession.beginConfiguration()
+        let currentInput = captureSession.inputs.first as? AVCaptureDeviceInput
+        captureSession.removeInput(currentInput!)
         
+        let newCameraDevice = currentInput?.device.position == .back ? camera(with: .front) : camera(with: .back)
+        let newVideoInput = try? AVCaptureDeviceInput(device: newCameraDevice!)
+        captureSession.addInput(newVideoInput!)
+        captureSession.commitConfiguration()
+    }
+    private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let devices = AVCaptureDevice.devices(for: AVMediaType.video)
+        return devices.filter { $0.position == position }.first
     }
 }

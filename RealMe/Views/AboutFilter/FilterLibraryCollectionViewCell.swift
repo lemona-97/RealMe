@@ -21,13 +21,16 @@ final class FilterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
     
     func setAttribute() {
 
-        contentView.backgroundColor = .white
-        
+        contentView.backgroundColor = .clear
+        sampleImageView.do {
+            $0.image = UIImage(named: "1")
+        }
         sampleImageName.do {
             $0.text = "필터명"
-            $0.textColor = .black
+            $0.textColor = .white
             $0.textAlignment = .center
-            $0.font = UIFont(descriptor: .preferredFontDescriptor(withTextStyle: .title3), size: CGFloat(11.0))
+            $0.font = UIFont(descriptor: .preferredFontDescriptor(withTextStyle: .subheadline),
+                            size: CGFloat(12.0))
         }
     }
     func addView() {
@@ -41,7 +44,7 @@ final class FilterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
         }
         sampleImageName.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(10)
+            $0.bottom.equalToSuperview().offset(5)
             $0.height.equalTo(20)
         }
     }

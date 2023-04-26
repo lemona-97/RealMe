@@ -18,7 +18,7 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             // 아직 미구현 사진 집기 -> stop running -> view 띄우고 사진 넣기 + 필터 가져오기
-            self.captureSession.stopRunning()
+//            self.captureSession.stopRunning()
             
         }
         dismiss(animated: true, completion: nil)
