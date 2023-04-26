@@ -8,16 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		3EB0F9D7C60F7518DA0C64E2 /* Pods_RealMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C64392301B75DAAA33EF76 /* Pods_RealMe.framework */; };
+		FA970D9029F8E1FF00D2E93C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA970D8F29F8E1FF00D2E93C /* MainViewController.swift */; };
 		FAC32E5229CC774000D5C7BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5129CC774000D5C7BC /* AppDelegate.swift */; };
 		FAC32E5429CC774000D5C7BC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */; };
 		FAC32E5B29CC774200D5C7BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAC32E5A29CC774200D5C7BC /* Assets.xcassets */; };
 		FAC32E5E29CC774200D5C7BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAC32E5C29CC774200D5C7BC /* LaunchScreen.storyboard */; };
-		FAC32E6629CC7B1A00D5C7BC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */; };
 		FAC32E6D29CC7BEF00D5C7BC /* ViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E6C29CC7BEF00D5C7BC /* ViewControllerProtocol.swift */; };
 		FAC32E6F29CC960F00D5C7BC /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E6E29CC960F00D5C7BC /* UIView.swift */; };
 		FAC32E7229CD6C3A00D5C7BC /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7129CD6C3A00D5C7BC /* LeftAlignedCollectionViewFlowLayout.swift */; };
-		FAC32E7429CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7329CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift */; };
-		FAC32E7629CD7C0000D5C7BC /* filtersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7529CD7C0000D5C7BC /* filtersManager.swift */; };
+		FAC32E7429CD6DAE00D5C7BC /* FilterLibraryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7329CD6DAE00D5C7BC /* FilterLibraryCollectionViewCell.swift */; };
+		FAC32E7629CD7C0000D5C7BC /* FiltersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7529CD7C0000D5C7BC /* FiltersManager.swift */; };
 		FAC32E7829CD821B00D5C7BC /* CollectionViewFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7729CD821B00D5C7BC /* CollectionViewFunc.swift */; };
 		FAC32E7A29CEDEEE00D5C7BC /* UIImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E7929CEDEEE00D5C7BC /* UIImagePickerController.swift */; };
 /* End PBXBuildFile section */
@@ -26,18 +26,18 @@
 		2DD377AF849F34F943F6D946 /* Pods-RealMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealMe.debug.xcconfig"; path = "Target Support Files/Pods-RealMe/Pods-RealMe.debug.xcconfig"; sourceTree = "<group>"; };
 		3BF17A2595CEB89903E40C32 /* Pods-RealMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealMe.release.xcconfig"; path = "Target Support Files/Pods-RealMe/Pods-RealMe.release.xcconfig"; sourceTree = "<group>"; };
 		F1C64392301B75DAAA33EF76 /* Pods_RealMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA970D8F29F8E1FF00D2E93C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		FAC32E4E29CC774000D5C7BC /* RealMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC32E5129CC774000D5C7BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		FAC32E5A29CC774200D5C7BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FAC32E5D29CC774200D5C7BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAC32E5F29CC774200D5C7BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		FAC32E6C29CC7BEF00D5C7BC /* ViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerProtocol.swift; sourceTree = "<group>"; };
 		FAC32E6E29CC960F00D5C7BC /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		FAC32E7129CD6C3A00D5C7BC /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
-		FAC32E7329CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filterLibraryCollectionViewCell.swift; sourceTree = "<group>"; };
-		FAC32E7529CD7C0000D5C7BC /* filtersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filtersManager.swift; sourceTree = "<group>"; };
+		FAC32E7329CD6DAE00D5C7BC /* FilterLibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterLibraryCollectionViewCell.swift; sourceTree = "<group>"; };
+		FAC32E7529CD7C0000D5C7BC /* FiltersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersManager.swift; sourceTree = "<group>"; };
 		FAC32E7729CD821B00D5C7BC /* CollectionViewFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewFunc.swift; sourceTree = "<group>"; };
 		FAC32E7929CEDEEE00D5C7BC /* UIImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePickerController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,8 +74,9 @@
 		FAA9531829EFAEF50093EF09 /* AboutFilter */ = {
 			isa = PBXGroup;
 			children = (
-				FAC32E7329CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift */,
-				FAC32E7529CD7C0000D5C7BC /* filtersManager.swift */,
+				FAC32E7529CD7C0000D5C7BC /* FiltersManager.swift */,
+				FAC32E7329CD6DAE00D5C7BC /* FilterLibraryCollectionViewCell.swift */,
+				FAC32E7729CD821B00D5C7BC /* CollectionViewFunc.swift */,
 			);
 			path = AboutFilter;
 			sourceTree = "<group>";
@@ -141,9 +142,9 @@
 		FAC32E6B29CC7B6C00D5C7BC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA970D8F29F8E1FF00D2E93C /* MainViewController.swift */,
 				FAA9531829EFAEF50093EF09 /* AboutFilter */,
-				FAC32E7B29CEDEF200D5C7BC /* ExtensionOfViewController */,
-				FAC32E6529CC7B1A00D5C7BC /* MainViewController.swift */,
+				FAC32E7B29CEDEF200D5C7BC /* ExtensionOfMainViewController */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -156,13 +157,12 @@
 			path = CustonClass;
 			sourceTree = "<group>";
 		};
-		FAC32E7B29CEDEF200D5C7BC /* ExtensionOfViewController */ = {
+		FAC32E7B29CEDEF200D5C7BC /* ExtensionOfMainViewController */ = {
 			isa = PBXGroup;
 			children = (
-				FAC32E7729CD821B00D5C7BC /* CollectionViewFunc.swift */,
 				FAC32E7929CEDEEE00D5C7BC /* UIImagePickerController.swift */,
 			);
-			path = ExtensionOfViewController;
+			path = ExtensionOfMainViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,9 +281,9 @@
 			files = (
 				FAC32E6F29CC960F00D5C7BC /* UIView.swift in Sources */,
 				FAC32E7829CD821B00D5C7BC /* CollectionViewFunc.swift in Sources */,
-				FAC32E7629CD7C0000D5C7BC /* filtersManager.swift in Sources */,
-				FAC32E7429CD6DAE00D5C7BC /* filterLibraryCollectionViewCell.swift in Sources */,
-				FAC32E6629CC7B1A00D5C7BC /* MainViewController.swift in Sources */,
+				FAC32E7629CD7C0000D5C7BC /* FiltersManager.swift in Sources */,
+				FAC32E7429CD6DAE00D5C7BC /* FilterLibraryCollectionViewCell.swift in Sources */,
+				FA970D9029F8E1FF00D2E93C /* MainViewController.swift in Sources */,
 				FAC32E7229CD6C3A00D5C7BC /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				FAC32E5229CC774000D5C7BC /* AppDelegate.swift in Sources */,
 				FAC32E6D29CC7BEF00D5C7BC /* ViewControllerProtocol.swift in Sources */,
