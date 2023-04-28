@@ -5,9 +5,10 @@
 //  Created by 임우섭 on 2023/03/24.
 //
 
-import Foundation
 import UIKit
 import CoreImage
+
+private let filters : [String] = ["CISepiaTone", "CIMaskToAlpha", "CIXRay", "CIVignette"]
 
 struct FilteredInfoWithKorean {
     let resultFilterInfo : String

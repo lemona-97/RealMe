@@ -197,16 +197,11 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         connection.videoOrientation = orientation
-        
-        
-        let addFilter = currentFilter
-        
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        addFilter!.setValue(cameraImage, forKey: kCIInputImageKey)
         
-        let cgImage = self.context.createCGImage(addFilter!.outputImage!, from: cameraImage.extent)!
+        let cgImage = self.context.createCGImage(cameraImage, from: cameraImage.extent)!
         
         if currentCamera?.position == .front {
             print("1")
