@@ -22,9 +22,10 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     let context = CIContext()
     
+    var currentFilter = CIFilter(name: "CISepiaTone")
     var filteredImage =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
-
+    
     
     let photoLibraryButton = UIButton()
     let takePhotoButton = UIButton()
@@ -120,7 +121,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
         {
             AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
-            { (authorized) in
+                                            { (authorized) in
                 DispatchQueue.main.async
                 {
                     if authorized
@@ -144,8 +145,8 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
                 frontCamera = device
             }
         }
-        
         currentCamera = backCamera
+        
     }
     
     func setupInputOutput() {
@@ -196,27 +197,44 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         connection.videoOrientation = orientation
-        
-        
-        let comicEffect = CIFilter(name: "CIComicEffect")
-        
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        comicEffect!.setValue(cameraImage, forKey: kCIInputImageKey)
         
-        let cgImage = self.context.createCGImage(comicEffect!.outputImage!, from: cameraImage.extent)!
+        let cgImage = self.context.createCGImage(cameraImage, from: cameraImage.extent)!
         
-        DispatchQueue.main.async {
-            let filteredImage = UIImage(cgImage: cgImage)
-            self.filteredImage.image = filteredImage
+        if currentCamera?.position == .front {
+            print("1")
+            DispatchQueue.main.async {
+                let filteredImage = UIImage(cgImage: cgImage).withHorizontallyFlippedOrientation()
+                self.filteredImage.image = filteredImage
+            }
+        } else {
+            print("2")
+            DispatchQueue.main.async {
+                let filteredImage = UIImage(cgImage: cgImage)
+                self.filteredImage.image = filteredImage
+            }
         }
+        
     }
     
     @objc func takePhoto() {
         
     }
     @objc func switchCamera() {
+        captureSession.beginConfiguration()
+        let currentInput = captureSession.inputs.first as? AVCaptureDeviceInput
+        captureSession.removeInput(currentInput!)
         
+        let newCameraDevice = currentInput?.device.position == .back ? camera(with: .front) : camera(with: .back)
+        currentCamera = newCameraDevice!
+        let newVideoInput = try? AVCaptureDeviceInput(device: newCameraDevice!)
+        captureSession.addInput(newVideoInput!)
+        captureSession.commitConfiguration()
+    }
+    private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let devices = AVCaptureDevice.devices(for: AVMediaType.video)
+        return devices.filter { $0.position == position }.first
     }
 }
