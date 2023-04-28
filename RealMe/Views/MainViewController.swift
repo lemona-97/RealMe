@@ -9,8 +9,8 @@ import UIKit
 import AVFoundation
 import SnapKit
 import Then
-
-class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate {
+import Photos
+class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
     var captureSession = AVCaptureSession()
     var backCamera: AVCaptureDevice?
@@ -220,7 +220,8 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     }
     
     @objc func takePhoto() {
-        
+        let setting = AVCapturePhotoSettings()
+        photoOutput?.capturePhoto(with: setting, delegate: self)
     }
     @objc func switchCamera() {
         captureSession.beginConfiguration()
@@ -237,4 +238,27 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
         return devices.filter { $0.position == position }.first
     }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard error == nil else { return }
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        guard let image = UIImage(data: imageData) else { return }
+        self.savePhotoLibrary(image: image)
+    }
+    func savePhotoLibrary(image: UIImage) {
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            if status == .authorized {
+                PHPhotoLibrary.shared().performChanges ({
+                    PHAssetChangeRequest.creationRequestForAsset(from: image)
+                }) { (success, error) in
+                    print("성공, \(success)")
+                }
+            }
+            else {
+                print("에러났지롱")
+            }
+        }
+    }
 }
+
+
