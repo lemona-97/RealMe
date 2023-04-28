@@ -6,6 +6,7 @@ target 'RealMe' do
   use_frameworks!
   pod 'Then'
   pod 'SnapKit'
+  pod 'RxSwift'
   # Pods for RealMe
 
 end
