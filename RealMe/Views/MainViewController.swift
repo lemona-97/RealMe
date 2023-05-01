@@ -20,7 +20,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     var photoOutput: AVCapturePhotoOutput?
     var orientation: AVCaptureVideoOrientation = .portrait
     let context = CIContext()
-    var cameraImage = CIImage()
+    var currentCGImage : CGImage?
     var photoData: Data?
     
     var currentFilter = CIFilter(name: "CISepiaTone")
@@ -201,21 +201,22 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         connection.videoOrientation = orientation
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
+        let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        
-        let cgImage = self.context.createCGImage(cameraImage, from: cameraImage.extent)!
+        let filter = currentFilter!
+        let image = cameraImage
+        filter.setValue(image, forKey: kCIInputImageKey)
+        let result = filter.outputImage!
+        currentCGImage = context.createCGImage(result, from: result.extent)!
         
         if currentCamera?.position == .front {
-            print("1")
             DispatchQueue.main.async {
-                let filteredImage = UIImage(cgImage: cgImage).withHorizontallyFlippedOrientation()
+                let filteredImage = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
                 self.filteredImage.image = filteredImage
             }
         } else {
-            print("2")
             DispatchQueue.main.async {
-                let filteredImage = UIImage(cgImage: cgImage)
+                let filteredImage = UIImage(cgImage: self.currentCGImage!)
                 self.filteredImage.image = filteredImage
             }
         }
@@ -224,10 +225,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     @objc func takePhoto() {
         captureSession.stopRunning()
-        savePhotoLibrary(image: UIImage(ciImage: cameraImage))
-        print("camera ", cameraImage)
-        print("camera dump")
-        dump(cameraImage)
+        savePhotoLibrary(image: UIImage(cgImage: currentCGImage!))
     }
     @objc func switchCamera() {
         captureSession.beginConfiguration()
@@ -242,14 +240,10 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     }
     private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
+        print("이거 호출 되냐")
         return devices.filter { $0.position == position }.first
     }
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        print("?")
-        guard let imageData = photo.fileDataRepresentation() else { return }
-        let image = UIImage(data: imageData)
-        print("사진찍힘")
-    }
+    
     func savePhotoLibrary(image: UIImage) {
         photoData = image.jpegData(compressionQuality: 1.0)
         PHPhotoLibrary.shared().performChanges({
@@ -262,7 +256,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
                     } else {
                         print("Unable to save image to album")
                     }
-                })
+        })
     }
 }
 
