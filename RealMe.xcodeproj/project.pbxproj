@@ -434,6 +434,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = RealMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = Test;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진좀 씁시다";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "쓸게";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -469,6 +471,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = RealMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = Test;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진좀 씁시다";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "쓸게";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;

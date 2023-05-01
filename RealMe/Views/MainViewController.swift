@@ -19,8 +19,9 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     var photoOutput: AVCapturePhotoOutput?
     var orientation: AVCaptureVideoOrientation = .portrait
-    
     let context = CIContext()
+    var cameraImage = CIImage()
+    var photoData: Data?
     
     var currentFilter = CIFilter(name: "CISepiaTone")
     var filteredImage =  UIImageView()
@@ -163,7 +164,9 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
             if captureSession.canAddOutput(videoOutput) {
                 captureSession.addOutput(videoOutput)
             }
-            captureSession.startRunning()
+            DispatchQueue.global().async {
+                self.captureSession.startRunning()
+            }
         } catch {
             print(error)
         }
@@ -174,7 +177,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
             //see available types
             //print("\(vFormat) \n")
             
-            var ranges = vFormat.videoSupportedFrameRateRanges as [AVFrameRateRange]
+            let ranges = vFormat.videoSupportedFrameRateRanges as [AVFrameRateRange]
             let frameRates = ranges[0]
             
             do {
@@ -198,7 +201,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         connection.videoOrientation = orientation
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
+        cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
         
         let cgImage = self.context.createCGImage(cameraImage, from: cameraImage.extent)!
@@ -220,8 +223,11 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     }
     
     @objc func takePhoto() {
-        let setting = AVCapturePhotoSettings()
-        photoOutput?.capturePhoto(with: setting, delegate: self)
+        captureSession.stopRunning()
+        savePhotoLibrary(image: UIImage(ciImage: cameraImage))
+        print("camera ", cameraImage)
+        print("camera dump")
+        dump(cameraImage)
     }
     @objc func switchCamera() {
         captureSession.beginConfiguration()
@@ -238,26 +244,25 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
         return devices.filter { $0.position == position }.first
     }
-    
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard error == nil else { return }
+        print("?")
         guard let imageData = photo.fileDataRepresentation() else { return }
-        guard let image = UIImage(data: imageData) else { return }
-        self.savePhotoLibrary(image: image)
+        let image = UIImage(data: imageData)
+        print("사진찍힘")
     }
     func savePhotoLibrary(image: UIImage) {
-        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-            if status == .authorized {
-                PHPhotoLibrary.shared().performChanges ({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }) { (success, error) in
-                    print("성공, \(success)")
-                }
-            }
-            else {
-                print("에러났지롱")
-            }
-        }
+        photoData = image.jpegData(compressionQuality: 1.0)
+        PHPhotoLibrary.shared().performChanges({
+                    // 앨범에 이미지 저장
+                    let creationRequest = PHAssetCreationRequest.forAsset()
+            creationRequest.addResource(with: .photo, data: self.photoData!, options: nil)
+                }, completionHandler: { success, error in
+                    if success {
+                        print("Image saved to album")
+                    } else {
+                        print("Unable to save image to album")
+                    }
+                })
     }
 }
 
