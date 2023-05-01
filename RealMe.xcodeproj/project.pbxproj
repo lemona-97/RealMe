@@ -107,7 +107,7 @@
 		FAC32E5029CC774000D5C7BC /* RealMe */ = {
 			isa = PBXGroup;
 			children = (
-				FAC32E7029CD6C1100D5C7BC /* CustonClass */,
+				FAC32E7029CD6C1100D5C7BC /* Class */,
 				FAC32E6B29CC7B6C00D5C7BC /* Views */,
 				FAC32E6929CC7B4B00D5C7BC /* Extension */,
 				FAC32E6829CC7B4300D5C7BC /* Protocol */,
@@ -155,12 +155,12 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		FAC32E7029CD6C1100D5C7BC /* CustonClass */ = {
+		FAC32E7029CD6C1100D5C7BC /* Class */ = {
 			isa = PBXGroup;
 			children = (
 				FAC32E7129CD6C3A00D5C7BC /* LeftAlignedCollectionViewFlowLayout.swift */,
 			);
-			path = CustonClass;
+			path = Class;
 			sourceTree = "<group>";
 		};
 		FAC32E7B29CEDEF200D5C7BC /* ExtensionOfMainViewController */ = {
@@ -441,9 +441,9 @@
 				INFOPLIST_FILE = RealMe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RealMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
-				INFOPLIST_KEY_NSCameraUsageDescription = Test;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진좀 씁시다";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "쓸게";
+				INFOPLIST_KEY_NSCameraUsageDescription = "접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -478,9 +478,9 @@
 				INFOPLIST_FILE = RealMe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RealMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
-				INFOPLIST_KEY_NSCameraUsageDescription = Test;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진좀 씁시다";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "쓸게";
+				INFOPLIST_KEY_NSCameraUsageDescription = "접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;

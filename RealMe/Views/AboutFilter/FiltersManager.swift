@@ -22,8 +22,8 @@ class FilterManager {
     static func returnFilterName(_ filterName: Int) -> FilteredInfoWithKorean {
         switch filterName {
         case 0:
-            let filterInfo = "CISepiaTone"
-            let filterKorean = "노을"
+            let filterInfo = ""
+            let filterKorean = "기본"
             return FilteredInfoWithKorean(resultFilterInfo: filterInfo, resultFilterKoreanName: filterKorean)
 
         case 1:
@@ -39,6 +39,10 @@ class FilterManager {
         case 3:
             let filterInfo = "CIVignette"
             let filterKorean = "선명함"
+            return FilteredInfoWithKorean(resultFilterInfo: filterInfo, resultFilterKoreanName: filterKorean)
+        case 4:
+            let filterInfo = "CISepiaTone"
+            let filterKorean = "노을"
             return FilteredInfoWithKorean(resultFilterInfo: filterInfo, resultFilterKoreanName: filterKorean)
 
         default:

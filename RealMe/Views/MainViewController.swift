@@ -10,7 +10,7 @@ import AVFoundation
 import SnapKit
 import Then
 import Photos
-class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
+final class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
     var captureSession = AVCaptureSession()
     var backCamera: AVCaptureDevice?
@@ -23,7 +23,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     var currentCGImage : CGImage?
     var photoData: Data?
     
-    var currentFilter = CIFilter(name: "CISepiaTone")
+    var currentFilter : CIFilter?
     var filteredImage =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
@@ -203,23 +203,39 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        let filter = currentFilter!
-        let image = cameraImage
-        filter.setValue(image, forKey: kCIInputImageKey)
-        let result = filter.outputImage!
-        currentCGImage = context.createCGImage(result, from: result.extent)!
-        
-        if currentCamera?.position == .front {
-            DispatchQueue.main.async {
-                let filteredImage = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
-                self.filteredImage.image = filteredImage
+        if currentFilter == nil {
+            if currentCamera?.position == .front {
+                currentCGImage =  context.createCGImage(cameraImage, from: cameraImage.extent)
+                
+                DispatchQueue.main.async {
+                    self.filteredImage.image = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.filteredImage.image = UIImage(ciImage: cameraImage)
+                }
             }
+            
         } else {
-            DispatchQueue.main.async {
+            let filter = currentFilter!
+            let image = cameraImage
+            filter.setValue(image, forKey: kCIInputImageKey)
+            let result = filter.outputImage!
+            currentCGImage = context.createCGImage(result, from: result.extent)!
+            
+            if currentCamera?.position == .front {
+                let filteredImage = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
+                DispatchQueue.main.async {
+                    self.filteredImage.image = filteredImage
+                }
+            } else {
                 let filteredImage = UIImage(cgImage: self.currentCGImage!)
-                self.filteredImage.image = filteredImage
+                DispatchQueue.main.async {
+                    self.filteredImage.image = filteredImage
+                }
             }
         }
+        
         
     }
     
@@ -240,7 +256,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     }
     private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
-        print("이거 호출 되냐")
+        print("카메라 전/후면 전환")
         return devices.filter { $0.position == position }.first
     }
     
@@ -252,9 +268,9 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
             creationRequest.addResource(with: .photo, data: self.photoData!, options: nil)
                 }, completionHandler: { success, error in
                     if success {
-                        print("Image saved to album")
+                        print("이미지 저장 완료.")
                     } else {
-                        print("Unable to save image to album")
+                        print("이미지 저장 실패.")
                     }
         })
     }

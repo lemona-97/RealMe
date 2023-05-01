@@ -23,7 +23,7 @@ final class FilterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
 
         contentView.backgroundColor = .clear
         sampleImageView.do {
-            $0.image = UIImage(named: "1")
+            $0.image = UIImage(named: "샘플이미지")
         }
         sampleImageName.do {
             $0.text = "필터명"
