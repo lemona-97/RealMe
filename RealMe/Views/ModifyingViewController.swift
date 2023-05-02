@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Photos
 
-class ModifyingViewController: UIViewController, ViewControllerProtocol, UICollectionViewDelegate {
+class ModifyingViewController: UIViewController, ViewControllerProtocol {
     
     var modifyImage : UIImage?
     let modiImageView = UIImageView()
@@ -24,7 +24,7 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol, UIColle
         setAttribute()
         addView()
         setLayout()
-        setDelegate()
+        addDelegate()
         addTarget()
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -51,7 +51,8 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol, UIColle
     }
 
     func addView() {
-        self.view.addSubviews([modiImageView, savePhotoButton, filterLibraryCollectionView])
+        self.view.addSubviews([modiImageView, savePhotoButton])
+        self.view.addSubview(filterLibraryCollectionView)
 
     }
 
@@ -68,12 +69,12 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol, UIColle
             $0.height.equalTo(30)
         }
         filterLibraryCollectionView.snp.makeConstraints {
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
             $0.height.equalTo(90)
             $0.leading.trailing.equalToSuperview()
         }
     }
-    func setDelegate() {
+    func addDelegate() {
         filterLibraryCollectionView.delegate = self
         filterLibraryCollectionView.dataSource = self
     }
@@ -97,7 +98,7 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol, UIColle
     }
 }
 
-extension ModifyingViewController : UICollectionViewDataSource {
+extension ModifyingViewController : UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         filterCount
     }
@@ -109,10 +110,11 @@ extension ModifyingViewController : UICollectionViewDataSource {
             cell.sampleImageName.text = FilterManager.returnAboutFilter(CIImage(), 0).resultFilterKoreanName
         } else {
             let result = FilterManager.returnAboutFilter(CIImage(image: cell.sampleImageView.image!)!, indexPath.row).resultCIFilteredCIImage!
-            cell.sampleImageView.image = UIImage(ciImage: result)
+            let cgImage = CIContext().createCGImage(result, from: result.extent)!
+            cell.sampleImageView.image = UIImage(cgImage: cgImage)
             cell.sampleImageName.text = FilterManager.returnAboutFilter(CIImage(), indexPath.row).resultFilterKoreanName
         }
-
+        
         return cell
     }
 
@@ -126,7 +128,5 @@ extension ModifyingViewController : UICollectionViewDataSource {
 
         self.modiImageView.image = UIImage(cgImage: cgImage, scale: self.modifyImage!.scale, orientation: self.modifyImage!.imageOrientation)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 50, height: 70)
-    }
+    
 }

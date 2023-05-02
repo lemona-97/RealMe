@@ -20,6 +20,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         } else {
             let result = FilterManager.returnAboutFilter(CIImage(image: cell.sampleImageView.image!)!, indexPath.row).resultCIFilteredCIImage!
             let cgImage = context.createCGImage(result, from: result.extent)
+            
             cell.sampleImageView.image = UIImage(cgImage: cgImage!)
             cell.sampleImageName.text = FilterManager.returnAboutFilter(CIImage(), indexPath.row).resultFilterKoreanName
         }

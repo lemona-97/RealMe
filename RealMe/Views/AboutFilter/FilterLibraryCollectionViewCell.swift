@@ -39,7 +39,8 @@ final class FilterLibraryCollectionViewCell: UICollectionViewCell, ViewControlle
     }
     func setLayout() {
         sampleImageView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview().offset(-15)
             $0.bottom.equalToSuperview().offset(-15)
         }
         sampleImageName.snp.makeConstraints {

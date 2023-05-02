@@ -100,7 +100,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         filterLibraryCollectionView.snp.makeConstraints {
             $0.leading.equalTo(filteredImage)
             $0.bottom.equalTo(filteredImage)
-            $0.height.equalTo(90)
+            $0.height.equalTo(75)
             $0.trailing.equalTo(filteredImage)
         }
     }
@@ -117,23 +117,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         orientation = AVCaptureVideoOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        print("1231231")
-//        super.viewDidAppear(animated)
-//        if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
-//        {
-//            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
-//                                            { (authorized) in
-//                DispatchQueue.main.async
-//                {
-//                    if authorized
-//                    {
-//                        self.setupInputOutput()
-//                    }
-//                }
-//            })
-//        }
-//    }
     
     func setupDevice() {
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
@@ -239,8 +222,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     }
     
     @objc func takePhoto() {
-        captureSession.stopRunning()
-        savePhotoLibrary(image: UIImage(cgImage: currentCGImage!))
+        savePhotoLibrary(image: filteredImage.image!)
     }
     @objc func switchCamera() {
         captureSession.beginConfiguration()
