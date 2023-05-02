@@ -17,6 +17,7 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         print("?")
+        
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.navigationController?.navigationBar.topItem?.title = ""
             let modiVC = ModifyingViewController()
@@ -27,11 +28,9 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        DispatchQueue.global().async {
-            self.captureSession.startRunning()
-        }
         dismiss(animated: true, completion: nil)
         
     }
+    
 }
 

@@ -21,9 +21,9 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     var orientation: AVCaptureVideoOrientation = .portrait
     let context = CIContext()
     var currentCGImage : CGImage?
-    var photoData: Data?
     
-    var currentFilter : CIFilter?
+    var photoData : Data?
+    var currentFilterNum = 0
     var filteredImage =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
@@ -117,22 +117,23 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         orientation = AVCaptureVideoOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
-        {
-            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
-                                            { (authorized) in
-                DispatchQueue.main.async
-                {
-                    if authorized
-                    {
-                        self.setupInputOutput()
-                    }
-                }
-            })
-        }
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        print("1231231")
+//        super.viewDidAppear(animated)
+//        if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
+//        {
+//            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
+//                                            { (authorized) in
+//                DispatchQueue.main.async
+//                {
+//                    if authorized
+//                    {
+//                        self.setupInputOutput()
+//                    }
+//                }
+//            })
+//        }
+//    }
     
     func setupDevice() {
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
@@ -150,7 +151,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         
     }
     
-    func setupInputOutput() {
+    public func setupInputOutput() {
         do {
             setupCorrectFramerate(currentCamera: currentCamera!)
             let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera!)
@@ -203,7 +204,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        if currentFilter == nil {
+        if currentFilterNum == 0 {
             if currentCamera?.position == .front {
                 currentCGImage =  context.createCGImage(cameraImage, from: cameraImage.extent)
                 
@@ -217,10 +218,8 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             }
             
         } else {
-            let filter = currentFilter!
-            let image = cameraImage
-            filter.setValue(image, forKey: kCIInputImageKey)
-            let result = filter.outputImage!
+            print(currentFilterNum)
+            let result = FilterManager.returnAboutFilter(cameraImage, currentFilterNum).resultCIFilteredCIImage!
             currentCGImage = context.createCGImage(result, from: result.extent)!
             
             if currentCamera?.position == .front {
@@ -261,11 +260,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     }
     
     func savePhotoLibrary(image: UIImage) {
-        photoData = image.jpegData(compressionQuality: 1.0)
+        let photoData = image.jpegData(compressionQuality: 1.0)
         PHPhotoLibrary.shared().performChanges({
                     // 앨범에 이미지 저장
                     let creationRequest = PHAssetCreationRequest.forAsset()
-            creationRequest.addResource(with: .photo, data: self.photoData!, options: nil)
+            creationRequest.addResource(with: .photo, data: photoData!, options: nil)
                 }, completionHandler: { success, error in
                     if success {
                         print("이미지 저장 완료.")
