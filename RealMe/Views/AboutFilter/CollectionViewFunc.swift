@@ -10,24 +10,28 @@ import AVFoundation
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        filterCount
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterLibraryCollectionViewCell", for: indexPath) as? FilterLibraryCollectionViewCell else { return UICollectionViewCell() }
-        let filter = CIFilter(name: FilterManager.returnFilterName(indexPath.row).resultFilterInfo)!
-        let image = CIImage(image: cell.sampleImageView.image!)
-        filter.setValue(image, forKey: kCIInputImageKey)
-        let result = filter.outputImage!
-        let cgImage = context.createCGImage(result, from: result.extent)
-        cell.sampleImageView.image = UIImage(cgImage: cgImage!)
+        
+        if FilterManager.returnAboutFilter(CIImage(), indexPath.row).resultFilterInfo == "" {
+            cell.sampleImageName.text = FilterManager.returnAboutFilter(CIImage(), 0).resultFilterKoreanName
+        } else {
+            let result = FilterManager.returnAboutFilter(CIImage(image: cell.sampleImageView.image!)!, indexPath.row).resultCIFilteredCIImage!
+            let cgImage = context.createCGImage(result, from: result.extent)
+            cell.sampleImageView.image = UIImage(cgImage: cgImage!)
+            cell.sampleImageName.text = FilterManager.returnAboutFilter(CIImage(), indexPath.row).resultFilterKoreanName
+        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print(FilterManager.returnFilterName(indexPath.row), "필터 적용준비")
-        self.currentFilter = CIFilter(name: FilterManager.returnFilterName(indexPath.row).resultFilterInfo)
+        print("\(indexPath.row)번째 필터 적용 준비.")
+        print(FilterManager.returnAboutFilter(CIImage(), indexPath.row).resultFilterKoreanName)
+        self.currentFilterNum = indexPath.row
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

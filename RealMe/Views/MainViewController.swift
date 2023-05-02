@@ -9,8 +9,8 @@ import UIKit
 import AVFoundation
 import SnapKit
 import Then
-
-class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate {
+import Photos
+final class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
     var captureSession = AVCaptureSession()
     var backCamera: AVCaptureDevice?
@@ -19,10 +19,11 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     
     var photoOutput: AVCapturePhotoOutput?
     var orientation: AVCaptureVideoOrientation = .portrait
-    
     let context = CIContext()
+    var currentCGImage : CGImage?
     
-    var currentFilter = CIFilter(name: "CISepiaTone")
+    var photoData : Data?
+    var currentFilterNum = 0
     var filteredImage =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
@@ -116,22 +117,23 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         orientation = AVCaptureVideoOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
-        {
-            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
-                                            { (authorized) in
-                DispatchQueue.main.async
-                {
-                    if authorized
-                    {
-                        self.setupInputOutput()
-                    }
-                }
-            })
-        }
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        print("1231231")
+//        super.viewDidAppear(animated)
+//        if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != .authorized
+//        {
+//            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler:
+//                                            { (authorized) in
+//                DispatchQueue.main.async
+//                {
+//                    if authorized
+//                    {
+//                        self.setupInputOutput()
+//                    }
+//                }
+//            })
+//        }
+//    }
     
     func setupDevice() {
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
@@ -149,7 +151,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         
     }
     
-    func setupInputOutput() {
+    public func setupInputOutput() {
         do {
             setupCorrectFramerate(currentCamera: currentCamera!)
             let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera!)
@@ -163,7 +165,9 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
             if captureSession.canAddOutput(videoOutput) {
                 captureSession.addOutput(videoOutput)
             }
-            captureSession.startRunning()
+            DispatchQueue.global().async {
+                self.captureSession.startRunning()
+            }
         } catch {
             print(error)
         }
@@ -174,7 +178,7 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
             //see available types
             //print("\(vFormat) \n")
             
-            var ranges = vFormat.videoSupportedFrameRateRanges as [AVFrameRateRange]
+            let ranges = vFormat.videoSupportedFrameRateRanges as [AVFrameRateRange]
             let frameRates = ranges[0]
             
             do {
@@ -200,27 +204,43 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let cameraImage = CIImage(cvImageBuffer: pixelBuffer!)
         
-        
-        let cgImage = self.context.createCGImage(cameraImage, from: cameraImage.extent)!
-        
-        if currentCamera?.position == .front {
-            print("1")
-            DispatchQueue.main.async {
-                let filteredImage = UIImage(cgImage: cgImage).withHorizontallyFlippedOrientation()
-                self.filteredImage.image = filteredImage
+        if currentFilterNum == 0 {
+            if currentCamera?.position == .front {
+                currentCGImage =  context.createCGImage(cameraImage, from: cameraImage.extent)
+                
+                DispatchQueue.main.async {
+                    self.filteredImage.image = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.filteredImage.image = UIImage(ciImage: cameraImage)
+                }
             }
+            
         } else {
-            print("2")
-            DispatchQueue.main.async {
-                let filteredImage = UIImage(cgImage: cgImage)
-                self.filteredImage.image = filteredImage
+            print(currentFilterNum)
+            let result = FilterManager.returnAboutFilter(cameraImage, currentFilterNum).resultCIFilteredCIImage!
+            currentCGImage = context.createCGImage(result, from: result.extent)!
+            
+            if currentCamera?.position == .front {
+                let filteredImage = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
+                DispatchQueue.main.async {
+                    self.filteredImage.image = filteredImage
+                }
+            } else {
+                let filteredImage = UIImage(cgImage: self.currentCGImage!)
+                DispatchQueue.main.async {
+                    self.filteredImage.image = filteredImage
+                }
             }
         }
+        
         
     }
     
     @objc func takePhoto() {
-        
+        captureSession.stopRunning()
+        savePhotoLibrary(image: UIImage(cgImage: currentCGImage!))
     }
     @objc func switchCamera() {
         captureSession.beginConfiguration()
@@ -235,6 +255,24 @@ class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVid
     }
     private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
+        print("카메라 전/후면 전환")
         return devices.filter { $0.position == position }.first
     }
+    
+    func savePhotoLibrary(image: UIImage) {
+        let photoData = image.jpegData(compressionQuality: 1.0)
+        PHPhotoLibrary.shared().performChanges({
+                    // 앨범에 이미지 저장
+                    let creationRequest = PHAssetCreationRequest.forAsset()
+            creationRequest.addResource(with: .photo, data: photoData!, options: nil)
+                }, completionHandler: { success, error in
+                    if success {
+                        print("이미지 저장 완료.")
+                    } else {
+                        print("이미지 저장 실패.")
+                    }
+        })
+    }
 }
+
+

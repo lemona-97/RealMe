@@ -14,7 +14,7 @@ class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
         super.init()
         self.scrollDirection = .horizontal
         self.minimumLineSpacing = 15
-        self.sectionInset = .init(top: 0, left: 10, bottom: 0, right: 0)
+        self.sectionInset = .init(top: 0, left: 10, bottom: 0, right: 10)
         
     }
     
