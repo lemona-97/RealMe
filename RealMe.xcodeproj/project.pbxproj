@@ -11,6 +11,7 @@
 		FA970D9029F8E1FF00D2E93C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA970D8F29F8E1FF00D2E93C /* MainViewController.swift */; };
 		FABC9B9829FF83F70013E0A9 /* CameraQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC9B9729FF83F70013E0A9 /* CameraQuality.swift */; };
 		FABC9B9A29FF888D0013E0A9 /* ModifyingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC9B9929FF888D0013E0A9 /* ModifyingViewController.swift */; };
+		FABC9B9E2A025E8C0013E0A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC9B9D2A025E8C0013E0A9 /* ViewController.swift */; };
 		FAC32E5229CC774000D5C7BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5129CC774000D5C7BC /* AppDelegate.swift */; };
 		FAC32E5429CC774000D5C7BC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */; };
 		FAC32E5B29CC774200D5C7BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAC32E5A29CC774200D5C7BC /* Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		FA970D8F29F8E1FF00D2E93C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		FABC9B9729FF83F70013E0A9 /* CameraQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraQuality.swift; sourceTree = "<group>"; };
 		FABC9B9929FF888D0013E0A9 /* ModifyingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyingViewController.swift; sourceTree = "<group>"; };
+		FABC9B9D2A025E8C0013E0A9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FAC32E4E29CC774000D5C7BC /* RealMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC32E5129CC774000D5C7BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAC32E5329CC774000D5C7BC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				FAC32E6E29CC960F00D5C7BC /* UIView.swift */,
+				FABC9B9D2A025E8C0013E0A9 /* ViewController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				FABC9B9A29FF888D0013E0A9 /* ModifyingViewController.swift in Sources */,
 				FABC9B9829FF83F70013E0A9 /* CameraQuality.swift in Sources */,
 				FAC32E7229CD6C3A00D5C7BC /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
+				FABC9B9E2A025E8C0013E0A9 /* ViewController.swift in Sources */,
 				FAC32E5229CC774000D5C7BC /* AppDelegate.swift in Sources */,
 				FAC32E6D29CC7BEF00D5C7BC /* ViewControllerProtocol.swift in Sources */,
 				FAC32E5429CC774000D5C7BC /* SceneDelegate.swift in Sources */,

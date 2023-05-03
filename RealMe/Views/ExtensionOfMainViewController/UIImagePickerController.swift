@@ -27,6 +27,7 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
         
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.navigationController?.navigationBar.topItem?.title = ""
+            self.navigationController?.navigationBar.tintColor = .black
             let modiVC = ModifyingViewController()
             modiVC.modifyImage = pickedImage
             self.navigationController?.pushViewController(modiVC, animated: true)
@@ -46,31 +47,21 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
         
         switch authorizationStatus {
         case .authorized:
-            print("1")
             return true // 사용자가 앱에 사진 라이브러리에 대한 액세스 권한을 명시 적으로 부여했습니다.
         case .denied:
-            print("2")
             break // 사용자가 사진 라이브러리에 대한 앱 액세스를 명시 적으로 거부했습니다.
         case .limited:
-            print("3")
             break // ?
         case .notDetermined: // 사진 라이브러리 액세스에는 명시적인 사용자 권한이 필요하지만 사용자가 아직 이러한 권한을 부여하거나 거부하지 않았습니다
-            print("4")
             PHPhotoLibrary.requestAuthorization { state in
                 if state == .authorized {
                     isAuth = true
                 }
-                
             }
-            
-            
-            print("456")
             return isAuth
         case .restricted:
-            print("5")
             break // 앱이 사진 라이브러리에 액세스 할 수있는 권한이 없으며 사용자는 이러한 권한을 부여 할 수 없습니다.
         default:
-            print("6")
             break
         }
         

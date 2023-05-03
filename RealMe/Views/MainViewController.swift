@@ -10,6 +10,7 @@ import AVFoundation
 import SnapKit
 import Then
 import Photos
+
 final class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
     var captureSession = AVCaptureSession()
@@ -43,7 +44,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         setupDevice()
         setupInputOutput()
         requestAuth()
-        
     }
     func setAttribute() {
         let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
@@ -118,7 +118,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     override func viewDidLayoutSubviews() {
         orientation = AVCaptureVideoOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!
     }
-    
     
     func setupDevice() {
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
@@ -254,10 +253,15 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
                 }, completionHandler: { success, error in
                     if success {
                         print("이미지 저장 완료.")
+                        DispatchQueue.main.async {
+                            self.showAlert(title: "앨범에 사진 저장", message: "성공", style: .alert, actionTitle: "확인")
+                        }
+                        
                     } else {
                         print("이미지 저장 실패.")
                     }
         })
+        
     }
     func requestAuth() {
         PHPhotoLibrary.requestAuthorization { state in

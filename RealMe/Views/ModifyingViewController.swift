@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Photos
 
-class ModifyingViewController: UIViewController, ViewControllerProtocol {
+final class ModifyingViewController: UIViewController, ViewControllerProtocol {
     
     var modifyImage : UIImage?
     let modiImageView = UIImageView()
@@ -34,6 +34,7 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
     func setAttribute() {
         modiImageView.do {
             $0.contentMode = .scaleAspectFit
+            $0.backgroundColor = .black
             $0.image = modifyImage!
         }
         filterLibraryCollectionView.do {
@@ -48,8 +49,11 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
         
         savePhotoButton.do {
             $0.setImage(UIImage(systemName: "arrow.down.circle", withConfiguration: imageConfig70), for: .normal)
+            $0.setImage(UIImage(systemName: "checkmark.circle", withConfiguration: imageConfig70), for: .highlighted)
             $0.tintColor = .white
             $0.backgroundColor = .black
+            $0.layer.cornerRadius = 50
+            
         }
     }
 
@@ -60,8 +64,9 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
     }
 
     func setLayout() {
+        self.view.backgroundColor = .white
         modiImageView.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(30)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
         }
@@ -71,7 +76,7 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         filterLibraryCollectionView.snp.makeConstraints {
-            $0.bottom.equalTo(savePhotoButton.snp.top).offset(-20)
+            $0.bottom.equalTo(savePhotoButton.snp.top)
             $0.height.equalTo(90)
             $0.leading.trailing.equalToSuperview()
         }
@@ -97,10 +102,7 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
                         print("이미지 저장 실패.")
                     }
         })
-        let alert = UIAlertController(title: "사진 저장 완료", message: "성공", preferredStyle: .alert)
-        let actionDone = UIAlertAction(title: "확인", style: .default, handler: .none)
-        alert.addAction(actionDone)
-        self.present(alert, animated: true, completion: nil)
+        showAlert(title: "앨범에 사진 저장", message: "성공!", style: .alert, actionTitle: "확인")
     }
 }
 
