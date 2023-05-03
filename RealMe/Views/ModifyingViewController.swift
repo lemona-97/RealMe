@@ -38,15 +38,18 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
         }
         filterLibraryCollectionView.do {
             let layout = LeftAlignedCollectionViewFlowLayout()
-            $0.backgroundColor = .lightGray
+            $0.backgroundColor = .clear
             $0.showsHorizontalScrollIndicator = true
             $0.showsVerticalScrollIndicator = false
             $0.collectionViewLayout = layout
             $0.register(FilterLibraryCollectionViewCell.self, forCellWithReuseIdentifier: "FilterLibraryCollectionViewCell")
         }
+        let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
+        
         savePhotoButton.do {
-            $0.setTitle("저장", for: .normal)
-            $0.backgroundColor = .gray
+            $0.setImage(UIImage(systemName: "arrow.down.circle", withConfiguration: imageConfig70), for: .normal)
+            $0.tintColor = .white
+            $0.backgroundColor = .black
         }
     }
 
@@ -63,13 +66,12 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
             $0.leading.trailing.equalToSuperview()
         }
         savePhotoButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-10)
-            $0.top.equalToSuperview().offset(100)
-            $0.width.equalTo(50)
-            $0.height.equalTo(30)
+            $0.centerX.equalToSuperview()
+            $0.height.width.equalTo(100)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         filterLibraryCollectionView.snp.makeConstraints {
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            $0.bottom.equalTo(savePhotoButton.snp.top).offset(-20)
             $0.height.equalTo(90)
             $0.leading.trailing.equalToSuperview()
         }
@@ -95,6 +97,10 @@ class ModifyingViewController: UIViewController, ViewControllerProtocol {
                         print("이미지 저장 실패.")
                     }
         })
+        let alert = UIAlertController(title: "사진 저장 완료", message: "성공", preferredStyle: .alert)
+        let actionDone = UIAlertAction(title: "확인", style: .default, handler: .none)
+        alert.addAction(actionDone)
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

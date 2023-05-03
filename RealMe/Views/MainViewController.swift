@@ -42,6 +42,8 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         
         setupDevice()
         setupInputOutput()
+        requestAuth()
+        
     }
     func setAttribute() {
         let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
@@ -242,6 +244,8 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     }
     
     func savePhotoLibrary(image: UIImage) {
+        let authorizationStatus = PHPhotoLibrary.authorizationStatus()
+        
         let photoData = image.jpegData(compressionQuality: 1.0)
         PHPhotoLibrary.shared().performChanges({
                     // 앨범에 이미지 저장
@@ -254,6 +258,13 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
                         print("이미지 저장 실패.")
                     }
         })
+    }
+    func requestAuth() {
+        PHPhotoLibrary.requestAuthorization { state in
+            if state == .authorized {
+                PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            }
+        }
     }
 }
 

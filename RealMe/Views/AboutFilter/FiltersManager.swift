@@ -51,11 +51,12 @@ class FilterManager {
 
         case 3:
             let filterInfo = "CIColorMonochrome"
-            let filterKorean = "핑크"
+            let filterKorean = "심령사진"
             let filter = CIFilter(name: filterInfo)
-            filter?.setValue(0.8, forKey: kCIInputIntensityKey)
+            filter?.setValue(1.0, forKey: kCIInputIntensityKey)
             filter?.setValue(image, forKey: kCIInputImageKey)
-            filter?.setValue(CIColor(color: .systemPink), forKey: kCIInputColorKey)
+            filter?.setValue(CIColor(color: .blue), forKey: kCIInputColorKey)
+            
             let filteredCIImage = filter?.outputImage
             return FilteredInfoWithKoreanWithCIFilter(resultFilterInfo: filterInfo, resultFilterKoreanName: filterKorean, resultCIFilteredCIImage: filteredCIImage)
         case 4:
