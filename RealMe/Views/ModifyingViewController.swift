@@ -27,10 +27,7 @@ final class ModifyingViewController: UIViewController, ViewControllerProtocol {
         addDelegate()
         addTarget()
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
-        
-    }
+    
     func setAttribute() {
         modiImageView.do {
             $0.contentMode = .scaleAspectFit
@@ -45,34 +42,31 @@ final class ModifyingViewController: UIViewController, ViewControllerProtocol {
             $0.collectionViewLayout = layout
             $0.register(FilterLibraryCollectionViewCell.self, forCellWithReuseIdentifier: "FilterLibraryCollectionViewCell")
         }
-        let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
+        let imageConfig50 = UIImage.SymbolConfiguration(pointSize: 50, weight: .light)
         
         savePhotoButton.do {
-            $0.setImage(UIImage(systemName: "arrow.down.circle", withConfiguration: imageConfig70), for: .normal)
-            $0.setImage(UIImage(systemName: "checkmark.circle", withConfiguration: imageConfig70), for: .highlighted)
+            $0.setImage(UIImage(systemName: "arrow.down.circle", withConfiguration: imageConfig50), for: .normal)
+            $0.setImage(UIImage(systemName: "checkmark.circle", withConfiguration: imageConfig50), for: .highlighted)
             $0.tintColor = .white
             $0.backgroundColor = .black
-            $0.layer.cornerRadius = 50
+            $0.layer.cornerRadius = 35
             
         }
     }
-
     func addView() {
         self.view.addSubviews([modiImageView, savePhotoButton])
         self.view.addSubview(filterLibraryCollectionView)
-
     }
-
     func setLayout() {
         self.view.backgroundColor = .white
         modiImageView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(30)
+            $0.top.equalToSuperview()
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
         }
         savePhotoButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.height.width.equalTo(100)
+            $0.height.width.equalTo(70)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         filterLibraryCollectionView.snp.makeConstraints {

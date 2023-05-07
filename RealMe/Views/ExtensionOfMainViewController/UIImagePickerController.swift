@@ -27,7 +27,7 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
         
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.navigationController?.navigationBar.topItem?.title = ""
-            self.navigationController?.navigationBar.tintColor = .black
+            self.navigationController?.navigationBar.tintColor = .white
             let modiVC = ModifyingViewController()
             modiVC.modifyImage = pickedImage
             self.navigationController?.pushViewController(modiVC, animated: true)
