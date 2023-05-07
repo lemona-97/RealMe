@@ -7,6 +7,7 @@ target 'RealMe' do
   pod 'Then'
   pod 'SnapKit'
   pod 'RxSwift'
+  pod 'RxGesture'
   # Pods for RealMe
 
 end
