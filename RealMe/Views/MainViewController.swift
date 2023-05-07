@@ -8,8 +8,11 @@
 import UIKit
 import AVFoundation
 import SnapKit
+
 import Then
 import Photos
+import RxSwift
+import RxGesture
 
 final class MainViewController: UIViewController, ViewControllerProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
@@ -25,7 +28,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     
     var photoData : Data?
     var currentFilterNum = 0
-    var filteredImage =  UIImageView()
+    var filteredImageView =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
     
@@ -33,6 +36,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     let takePhotoButton = UIButton()
     let changeCameraButton = UIButton()
     
+    let bag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
         setAttribute()
@@ -41,9 +45,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         addTarget()
         addDelegate()
         
+        
         setupDevice()
         setupInputOutput()
         requestAuth()
+        autoFocus()
     }
     func setAttribute() {
         let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
@@ -72,7 +78,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         }
     }
     func addView() {
-        self.view.addSubviews([photoLibraryButton, takePhotoButton, filteredImage, changeCameraButton])
+        self.view.addSubviews([photoLibraryButton, takePhotoButton, filteredImageView, changeCameraButton])
         self.view.addSubview(filterLibraryCollectionView)
     }
     func setLayout() {
@@ -94,16 +100,16 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.centerY.equalTo(takePhotoButton)
             $0.width.height.equalTo(70)
         }
-        filteredImage.snp.makeConstraints {
+        filteredImageView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalToSuperview()
             $0.bottom.equalTo(takePhotoButton.snp.top).offset(-10)
         }
         filterLibraryCollectionView.snp.makeConstraints {
-            $0.leading.equalTo(filteredImage)
-            $0.bottom.equalTo(filteredImage)
+            $0.leading.equalTo(filteredImageView)
+            $0.bottom.equalTo(filteredImageView)
             $0.height.equalTo(75)
-            $0.trailing.equalTo(filteredImage)
+            $0.trailing.equalTo(filteredImageView)
         }
     }
     func addDelegate() {
@@ -118,7 +124,60 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     override func viewDidLayoutSubviews() {
         orientation = AVCaptureVideoOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!
     }
-    
+    func autoFocus() {
+        print("auto focusing set.")
+        self.filteredImageView.rx.tapGesture()
+            .asDriver()
+            .drive(onNext: { [weak self] (gesture) in
+                print("?")
+                self?.tapFocus(gesture)
+            }).disposed(by: bag)
+        
+
+    }
+    private func tapFocus(_ sender: UITapGestureRecognizer) {
+        if (sender.state == .ended) {
+            let thisFocusPoint = sender.location(in: filteredImageView)
+            focusAnimationAt(thisFocusPoint)
+
+            let focus_x = thisFocusPoint.x / filteredImageView.frame.size.width
+            let focus_y = thisFocusPoint.y / filteredImageView.frame.size.height
+            
+            if (currentCamera!.isFocusModeSupported(.autoFocus) && currentCamera!.isFocusPointOfInterestSupported) {
+                do {
+                    try currentCamera?.lockForConfiguration()
+                    currentCamera?.focusMode = .autoFocus
+                    currentCamera?.focusPointOfInterest = CGPoint(x: focus_x, y: focus_y)
+
+                    if (currentCamera!.isExposureModeSupported(.autoExpose) && currentCamera!.isExposurePointOfInterestSupported) {
+                        currentCamera?.exposureMode = .autoExpose;
+                        currentCamera?.exposurePointOfInterest = CGPoint(x: focus_x, y: focus_y);
+                     }
+
+                    currentCamera?.unlockForConfiguration()
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    }
+    fileprivate func focusAnimationAt(_ point: CGPoint) {
+        let focusView = UIImageView(image: UIImage(named: "aim"))
+        focusView.center = point
+        filteredImageView.addSubview(focusView)
+
+        focusView.transform = CGAffineTransform(scaleX: 2, y: 2)
+
+        UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseInOut, animations: {
+            focusView.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
+        }) { (success) in
+            UIView.animate(withDuration: 0.15, delay: 1, options: .curveEaseInOut, animations: {
+                focusView.alpha = 0.0
+            }) { (success) in
+                focusView.removeFromSuperview()
+            }
+        }
+    }
     func setupDevice() {
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
         let devices = deviceDiscoverySession.devices
@@ -193,11 +252,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
                 currentCGImage =  context.createCGImage(cameraImage, from: cameraImage.extent)
                 
                 DispatchQueue.main.async {
-                    self.filteredImage.image = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
+                    self.filteredImageView.image = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.filteredImage.image = UIImage(ciImage: cameraImage)
+                    self.filteredImageView.image = UIImage(ciImage: cameraImage)
                 }
             }
             
@@ -208,12 +267,12 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             if currentCamera?.position == .front {
                 let filteredImage = UIImage(cgImage: self.currentCGImage!).withHorizontallyFlippedOrientation()
                 DispatchQueue.main.async {
-                    self.filteredImage.image = filteredImage
+                    self.filteredImageView.image = filteredImage
                 }
             } else {
                 let filteredImage = UIImage(cgImage: self.currentCGImage!)
                 DispatchQueue.main.async {
-                    self.filteredImage.image = filteredImage
+                    self.filteredImageView.image = filteredImage
                 }
             }
         }
@@ -222,7 +281,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     }
     
     @objc func takePhoto() {
-        savePhotoLibrary(image: filteredImage.image!)
+        savePhotoLibrary(image: filteredImageView.image!)
     }
     @objc func switchCamera() {
         captureSession.beginConfiguration()
