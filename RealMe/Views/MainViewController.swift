@@ -202,7 +202,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             }
             
         } else {
-            print(currentFilterNum)
             let result = FilterManager.returnAboutFilter(cameraImage, currentFilterNum).resultCIFilteredCIImage!
             currentCGImage = context.createCGImage(result, from: result.extent)!
             
