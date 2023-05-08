@@ -24,7 +24,7 @@ extension MainViewController: UIImagePickerControllerDelegate, UINavigationContr
         
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
+        self.navigationController?.isNavigationBarHidden = false
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.navigationController?.navigationBar.topItem?.title = ""
             self.navigationController?.navigationBar.tintColor = .white

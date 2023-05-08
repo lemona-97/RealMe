@@ -32,6 +32,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
 //    let flashButton = UIButton()
+    let settingButton = UIButton()
     let photoLibraryButton = UIButton()
     let takePhotoButton = UIButton()
     let changeCameraButton = UIButton()
@@ -52,8 +53,12 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         requestAuth()
         autoFocus()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     func setAttribute() {
-        let imageConfig15 = UIImage.SymbolConfiguration(pointSize: 15, weight: .light)
+        let imageConfig20 = UIImage.SymbolConfiguration(pointSize: 20, weight: .light)
         let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
         let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
         
@@ -70,6 +75,10 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.setImage(UIImage(systemName: "arrow.triangle.2.circlepath", withConfiguration: imageConfig30), for: .normal)
             $0.tintColor = .white
         }
+        settingButton.do {
+            $0.setImage(UIImage(systemName: "ellipsis.circle", withConfiguration: imageConfig20), for: .normal)
+            $0.tintColor = .white
+        }
         filterLibraryCollectionView.do {
             let layout = LeftAlignedCollectionViewFlowLayout()
             $0.backgroundColor = .clear
@@ -84,10 +93,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
 //        }
     }
     func addView() {
-        self.view.addSubviews([photoLibraryButton, takePhotoButton, filteredImageView, changeCameraButton])
+        self.view.addSubviews([photoLibraryButton, takePhotoButton, filteredImageView, changeCameraButton, settingButton])
         self.view.addSubview(filterLibraryCollectionView)
     }
     func setLayout() {
+        
         takePhotoButton.snp.makeConstraints {
             $0.width.equalTo(70)
             $0.height.equalTo(70)
@@ -117,6 +127,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.height.equalTo(75)
             $0.trailing.equalTo(filteredImageView)
         }
+        settingButton.snp.makeConstraints {
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            $0.width.height.equalTo(30)
+        }
 //        flashButton.snp.makeConstraints {
 //            $0.trailing.equalTo(self.view.safeAreaLayoutGuide)
 //            $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -131,6 +146,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         photoLibraryButton.addTarget(self, action: #selector(presentPhotoLibrary), for: .touchUpInside)
         takePhotoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
         changeCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
+        settingButton.addTarget(self, action: #selector(settingSomething), for: .touchUpInside)
 //        flashButton.addTarget(self, action: #selector(flashToggle), for: .touchUpInside)
     }
     override func viewDidLayoutSubviews() {
@@ -306,6 +322,13 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         captureSession.addInput(newVideoInput!)
         captureSession.commitConfiguration()
     }
+    @objc func settingSomething() {
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.topItem?.title = ""
+        self.navigationController?.navigationBar.tintColor = .white
+        let openVC = OpenSourceViewController()
+        self.navigationController?.pushViewController(openVC, animated: true)
+    }
 //    @objc func flashToggle() {
 //        if self.flashMode == .off {
 //            print("flash on")
@@ -324,7 +347,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     }
     
     func savePhotoLibrary(image: UIImage) {
-        let authorizationStatus = PHPhotoLibrary.authorizationStatus()
+//        let authorizationStatus = PHPhotoLibrary.authorizationStatus()
         
         let photoData = image.jpegData(compressionQuality: 1.0)
         PHPhotoLibrary.shared().performChanges({
