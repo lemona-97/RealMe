@@ -162,7 +162,8 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         }
     }
     fileprivate func focusAnimationAt(_ point: CGPoint) {
-        let focusView = UIImageView(image: UIImage(named: "aim"))
+        
+        let focusView = UIImageView(image: UIImage(named: "square"))
         focusView.center = point
         filteredImageView.addSubview(focusView)
 
@@ -276,8 +277,6 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
                 }
             }
         }
-        
-        
     }
     
     @objc func takePhoto() {
