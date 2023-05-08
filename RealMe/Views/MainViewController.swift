@@ -31,12 +31,13 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
     var filteredImageView =  UIImageView()
     let filterLibraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
-    
+//    let flashButton = UIButton()
     let photoLibraryButton = UIButton()
     let takePhotoButton = UIButton()
     let changeCameraButton = UIButton()
     
     let bag = DisposeBag()
+//    var flashMode = AVCaptureDevice.FlashMode.off
     override func viewDidLoad() {
         super.viewDidLoad()
         setAttribute()
@@ -52,6 +53,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         autoFocus()
     }
     func setAttribute() {
+        let imageConfig15 = UIImage.SymbolConfiguration(pointSize: 15, weight: .light)
         let imageConfig30 = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
         let imageConfig70 = UIImage.SymbolConfiguration(pointSize: 70, weight: .light)
         
@@ -76,6 +78,10 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.collectionViewLayout = layout
             $0.register(FilterLibraryCollectionViewCell.self, forCellWithReuseIdentifier: "FilterLibraryCollectionViewCell")
         }
+//        flashButton.do {
+//            $0.setImage(UIImage(systemName: "bolt.slash.fill", withConfiguration: imageConfig15), for: .normal)
+//            $0.setImage(UIImage(systemName: "bolt.fill", withConfiguration: imageConfig15), for: .selected)
+//        }
     }
     func addView() {
         self.view.addSubviews([photoLibraryButton, takePhotoButton, filteredImageView, changeCameraButton])
@@ -98,7 +104,7 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         changeCameraButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-30)
             $0.centerY.equalTo(takePhotoButton)
-            $0.width.height.equalTo(70)
+            $0.width.height.equalTo(60)
         }
         filteredImageView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -111,6 +117,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             $0.height.equalTo(75)
             $0.trailing.equalTo(filteredImageView)
         }
+//        flashButton.snp.makeConstraints {
+//            $0.trailing.equalTo(self.view.safeAreaLayoutGuide)
+//            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+//            $0.width.height.equalTo(30)
+//        }
     }
     func addDelegate() {
         filterLibraryCollectionView.delegate = self
@@ -120,16 +131,15 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         photoLibraryButton.addTarget(self, action: #selector(presentPhotoLibrary), for: .touchUpInside)
         takePhotoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
         changeCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
+//        flashButton.addTarget(self, action: #selector(flashToggle), for: .touchUpInside)
     }
     override func viewDidLayoutSubviews() {
         orientation = AVCaptureVideoOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!
     }
     func autoFocus() {
-        print("auto focusing set.")
         self.filteredImageView.rx.tapGesture()
             .asDriver()
             .drive(onNext: { [weak self] (gesture) in
-                print("?")
                 self?.tapFocus(gesture)
             }).disposed(by: bag)
         
@@ -167,10 +177,10 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         focusView.center = point
         filteredImageView.addSubview(focusView)
 
-        focusView.transform = CGAffineTransform(scaleX: 2, y: 2)
+        focusView.transform = CGAffineTransform(scaleX: 4, y: 4)
 
         UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseInOut, animations: {
-            focusView.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
+            focusView.transform = CGAffineTransform(scaleX: 1.7, y: 1.7)
         }) { (success) in
             UIView.animate(withDuration: 0.15, delay: 1, options: .curveEaseInOut, animations: {
                 focusView.alpha = 0.0
@@ -278,8 +288,11 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
             }
         }
     }
-    
+//    func didTapBtnTakePicture() {
+//        AVCapturePhotoSettings().flashMode = self.flashMode == .off ? .off : .on
+//    }
     @objc func takePhoto() {
+//        self.didTapBtnTakePicture()
         savePhotoLibrary(image: filteredImageView.image!)
     }
     @objc func switchCamera() {
@@ -293,6 +306,17 @@ final class MainViewController: UIViewController, ViewControllerProtocol, AVCapt
         captureSession.addInput(newVideoInput!)
         captureSession.commitConfiguration()
     }
+//    @objc func flashToggle() {
+//        if self.flashMode == .off {
+//            print("flash on")
+//            self.flashMode = .on
+//            self.flashButton.isSelected.toggle()
+//        } else {
+//            print("flash off")
+//            self.flashButton.isSelected.toggle()
+//            self.flashMode = .off
+//        }
+//    }
     private func camera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
         print("카메라 전/후면 전환")
