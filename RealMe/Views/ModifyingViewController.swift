@@ -58,7 +58,6 @@ final class ModifyingViewController: UIViewController, ViewControllerProtocol {
         self.view.addSubview(filterLibraryCollectionView)
     }
     func setLayout() {
-        self.view.backgroundColor = .white
         modiImageView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
