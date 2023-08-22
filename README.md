@@ -1,4 +1,4 @@
-# RealMe (사진 필터 앱)
+# RealMe (사진 필터 앱 - 출시 예정)
 
 # Logo
 <img src = "https://github.com/lemona-97/RealMe/assets/75213755/25b1f7f3-4b28-4e52-bb8d-c26b59ad928f" width="30%" height="30%">
